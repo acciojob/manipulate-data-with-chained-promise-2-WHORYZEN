@@ -1,67 +1,39 @@
-//your JS code here. If required.
 const input = document.getElementById('ip');
 const output = document.getElementById('output');
 const btn = document.getElementById('btn');
 
 btn.addEventListener('click', () => {
+  const initialArray = [1, 2, 3, 4]; // Fixed array as per the task
+  
   const promise1 = new Promise((resolve) => {
+    // First promise resolves after 3 seconds with the initial array
     setTimeout(() => {
-      resolve(Number(input.value));
-    }, 2000);
+      resolve(initialArray);
+    }, 3000);
   });
 
-  promise1.then((num) => {
-    output.textContent = `Result: ${num}`;
-    return num;
-  })
-  .then((num) => {
-    const promise2 = new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(num * 2);
-      }, 1000);
+  promise1
+    .then((arr) => {
+      // After 1 second, filter out odd numbers
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const evenNumbers = arr.filter(num => num % 2 === 0);
+          output.textContent = `Even numbers: ${evenNumbers.join(', ')}`;
+          resolve(evenNumbers);
+        }, 1000);
+      });
+    })
+    .then((evenNumbers) => {
+      // After 2 seconds, multiply even numbers by 2
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const doubledEvenNumbers = evenNumbers.map(num => num * 2);
+          output.textContent = `Doubled even numbers: ${doubledEvenNumbers.join(', ')}`;
+          resolve(doubledEvenNumbers);
+        }, 2000);
+      });
+    })
+    .catch((error) => {
+      console.error('Error:', error);
     });
-    return promise2;
-  })
-  .then((num) => {
-    output.textContent = `Result: ${num}`;
-    return num;
-  })
-  .then((num) => {
-    const promise3 = new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(num - 3);
-      }, 1000);
-    });
-    return promise3;
-  })
-  .then((num) => {
-    output.textContent = `Result: ${num}`;
-    return num;
-  })
-  .then((num) => {
-    const promise4 = new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(num / 2);
-      }, 1000);
-    });
-    return promise4;
-  })
-  .then((num) => {
-    output.textContent = `Result: ${num}`;
-    return num;
-  })
-  .then((num) => {
-    const promise5 = new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(num + 10);
-      }, 1000);
-    });
-    return promise5;
-  })
-  .then((num) => {
-    output.textContent = `Final Result: ${num}`;
-  })
-  .catch((error) => {
-    console.log(error);
-  });
 });
